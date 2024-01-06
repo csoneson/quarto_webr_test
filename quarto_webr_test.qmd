@@ -3,6 +3,8 @@ title: Testing webR in Quarto
 format: html
 engine: knitr
 embed-resources: true
+webr:
+    packages: ["dplyr"]
 filters:
     - webr
 ---
@@ -68,4 +70,9 @@ ggplot(mtcars, aes(x = am, y = mpg)) +
     geom_smooth(method = "lm", se = FALSE) + 
     theme_bw()
 ```
+
+# Shiny apps
+
+In principle, we can also include shiny apps (via shinylive). See [https://github.com/coatless-quarto/r-shinylive-demo](https://github.com/coatless-quarto/r-shinylive-demo). 
+However, this works only within a Quarto project. 
 
