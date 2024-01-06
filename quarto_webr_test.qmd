@@ -1,0 +1,71 @@
+---
+title: Testing webR in Quarto
+format: html
+engine: knitr
+embed-resources: true
+filters:
+    - webr
+---
+
+# Testing webR chunks
+
+A webR chunk is created by marking the chunk `{webr-r}`.
+The code in the chunk can be edited and executed by a user.
+The code can be executed line by line (Cmd-Enter on macOS) or the whole chunk at once (Shift-Enter). 
+
+```{webr-r}
+fit <- lm(mpg ~ am, data = mtcars)
+
+summary(fit)
+```
+
+# Regular chunks
+
+'Normal' R chunks (marked with `{r}`) still behave as usual.
+
+```{r}
+fit2 <- lm(mpg ~ am, data = mtcars)
+
+summary(fit2)
+```
+
+# Plotting
+
+Plotting works as well. 
+Objects can be reused between chunks - make sure that the chunk above is executed before trying to plot the fit object here!
+
+```{webr-r}
+plot(fit)
+```
+
+# Using packages
+
+In order to use packages with webR, they must be compiled for WebAssembly. 
+Many (but not all) CRAN packages are available (see [https://repo.r-wasm.org/](https://repo.r-wasm.org/)). 
+Here, we first install `ggplot2`: 
+
+```{webr-r}
+webr::install("ggplot2")
+```
+
+We can also specify the packages we want to use under the `webr` section in the YAML header. 
+They will then be installed automatically when the document is opened.
+
+```
+---
+webr:
+    packages: ["ggplot2"]
+filters:
+    - webr
+---
+```
+
+```{webr-r}
+library(ggplot2)
+
+ggplot(mtcars, aes(x = am, y = mpg)) + 
+    geom_point() + 
+    geom_smooth(method = "lm", se = FALSE) + 
+    theme_bw()
+```
+
